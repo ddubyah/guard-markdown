@@ -1,0 +1,4 @@
+guard 'krammer'
+  watch(%r{^source_docs/.+\.md})
+  watch(%r{^source_docs/.+\.markdown})
+end
