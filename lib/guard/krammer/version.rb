@@ -1,5 +1,5 @@
 module Guard
-  module Krammer
+  module KrammerVersion
     VERSION = "0.0.1"
   end
 end
