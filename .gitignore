@@ -1,7 +1,8 @@
 *.gem
 .bundle
 Gemfile.lock
-pkg/*
+pkg/* 
+.rvmrc
 
 ## MAC OS
 .DS_Store
