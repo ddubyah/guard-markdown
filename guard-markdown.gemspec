@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "guard/krammer/version"
+require "guard/markdown/version"
 
 Gem::Specification.new do |s|
-  s.name        = "guard-krammer"
-  s.version     = Guard::KrammerVersion::VERSION
+  s.name        = "guard-markdown"
+  s.version     = Guard::MarkdownVersion::VERSION
   s.authors     = ["Darren Wallace"]
   s.email       = ["wallace@midweekcrisis.com"]
   s.homepage    = "http://www.cdsm.co.uk"
