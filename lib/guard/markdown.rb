@@ -1,53 +1,42 @@
-require "krammer/version"
-
 require 'guard'
 require 'guard/guard'
+require 'guard/watcher'
+require 'Kramdown'
 
-module Guard
-  class Krammer < Guard
-
+module Guard  
+  class Markdown < Guard
+    # Your code goes here...
     def initialize(watchers=[], options={})
-      super
+      super              
       # init stuff here, thx!
-    end
-
-    # =================
-    # = Guard methods =
-    # =================
-
-    # If one of those methods raise an exception, the Guard::GuardName instance
-    # will be removed from the active guards.
-
-    # Called once when Guard starts
-    # Please override initialize method to init stuff
-    def start
-      true
-    end
-
-    # Called on Ctrl-C signal (when Guard quits)
-    def stop
-      true
-    end
-
-    # Called on Ctrl-Z signal
-    # This method should be mainly used for "reload" (really!) actions like reloading passenger/spork/bundler/...
-    def reload
-      true
-    end
-
-    # Called on Ctrl-\ signal
-    # This method should be principally used for long action like running all specs/tests/...
+    end      
+    
     def run_all
-      true
+      files = Dir.glob("**/*.*")
+      targets = Watcher.match_files(self, files) 
+      #puts "Running changes on these paths: #{targets}" 
+      run_on_change targets
     end
-
+    
     # Called on file(s) modifications
-    def run_on_change(pathss)
+    def run_on_change(paths)
       paths.each do |path|
-        puts path
+        input, output = path.split("|") 
+        puts "#{input} >> #{output}"
+        source = File.open(input,"rb").read 
+                                            
+        # make sure directory path exists
+        reg = /(.+\/).+\.\w+/i
+        target_path = output.gsub(reg,"\\1")
+        FileUtils.mkpath target_path unless target_path.empty?
+        
+        doc = Kramdown::Document.new(source, :input => "markdown").to_html
+        
+        File.open(output, "w") do |f|
+          f.puts(doc)
+        end
       end
       true
     end
-
   end
 end
