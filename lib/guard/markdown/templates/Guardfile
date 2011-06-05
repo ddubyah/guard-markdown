@@ -1,4 +1,9 @@
-guard 'markdown' do
-  watch(%r{^source_docs/.+\.md})
-  watch(%r{^source_docs/.+\.markdown})
+guard 'markdown' do  
+	# must produce a string => "input/path/file.md|target/path/output/file.html"
+	# The first regexp, watch (regexp) is used to match the files to be watched for changes
+	# The second regexp is used to determine the input path of the changed file, and the desired output path
+	# of the converted file, both built by the regexp matched against the detected changed file.
+	# The goal is to create a string of the form "input/path/file.md|output/path/file.html",
+	# i.e, both the input file path and the output file path separated by a pipe.
+	watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html"}
 end
