@@ -1,6 +1,7 @@
 require 'spec_helper'
 require 'Kramdown'
-require "guard/watcher" 
+require "guard/watcher"
+require "guard/ui" 
 
 describe "Guard-Markdown" do      
                              
@@ -12,6 +13,41 @@ describe "Guard-Markdown" do
 		@input_paths.each_index do |i|
 			@changed_paths << "#{@input_paths[i]}|#{@output_paths[i]}"
 		end
+	end 
+	
+	describe "initialize" do
+	  it "should start with default options" do
+	      @subject.options[:convert_on_start].should be true
+	      @subject.options[:dry_run].should be false
+	  end 
+		
+		it "should be possible to overwrite the default options" do
+			@subject = Guard::Markdown.new([],{ 
+				:convert_on_start => false,
+				:dry_run					=> true	})
+				@subject.options[:convert_on_start].should be false
+	      @subject.options[:dry_run].should be true
+		end
+	end 
+	
+	describe "start" do
+	  it "should show a welcome message" do
+			Guard::UI.should_receive(:info).with("Guard::Markdown has started watching your files")
+			@subject.start
+	  end
+		    
+		describe "convert_on_start" do
+		  it "should run all conversions if convert_on_start is true" do
+		    @subject.should_receive(:run_all)
+				@subject.start
+		  end
+			it "should not convert on start if convert_on_start is false" do
+			  @subject = Guard::Markdown.new([],{ :convert_on_start => false })
+				@subject.should_not_receive(:run_all)
+				@subject.start
+			end
+		end
+		
 	end
 
 	describe "run_on_change" do		
@@ -23,37 +59,53 @@ describe "Guard-Markdown" do
 				File.should_receive(:open).with(@input_paths[i],"rb").and_return(file_double) 
 				
 				mock_kramdown("#Title").should_receive(:to_html).and_return("<h1>Title</h1>") 			
+				         
+				#test info messages
+				Guard::UI.should_receive(:info).with("#{@input_paths[i]} >> #{@output_paths[i]}")
 				
 				#mock file write                                       
-				file_out = double()                                                       
+				file_out = double()   
+				target_path = @output_paths[i].gsub(/(.+\/).+\.\w+/i,"\\1")
+				FileUtils.should_receive(:mkpath).with(target_path)                                                      
 				File.should_receive(:open).with(@output_paths[i], "w").and_return(file_out)
 				
 				#TODO Not sure how to test actually writing to the file
 						
 			end
 			@subject.run_on_change(@changed_paths)
+		end
+		
+		describe "dry run" do
+		  it "should not permorm a conversion on a dry run" do
+		  	@subject = Guard::Markdown.new([],{ :dry_run=> true	})
+				FileUtils.should_not_receive(:mkpath)
+				File.should_not_receive(:open)
+				Kramdown::Document.should_not_receive(:new)
+				Guard::UI.should_receive(:info).exactly(3).times
+				@subject.run_on_change(@changed_paths)
+		  end
 		end            
 	end 
 	
-	# describe "run_all" do
-	#   it "should call run_on_change for all matching paths" do
-	# 		#mock Guard.watcher
-	# 		mock_watch = double()
-	# 
-	# 		#mock Dir
-	# 		Dir.should_receive(:glob).with("**/*.*").and_return(@input_paths)
-	# 	 	
-	# 		subject = Guard::Markdown.new(mock_watch)
-	# 		
-	# 		#Guard::Watcher should handle the matching and path manipulation
-	# 		## TODO the following line throws an uninitilizd const error Guard::Guard::Watcher -> don't know why. It'll have to go untested for now
-	# 		Watcher.should_receive(:match_files).with(subject, mock_watch).and_return(@changed_paths)
-	# 					
-	# 		subject.should_receive(:run_on_change).with(@changed_paths)
-	# 		
-	# 		subject.run_all
-	#   end
-	# end 
+	describe "run_all" do
+	  it "should call run_on_change for all matching paths" do
+			#mock Guard.watcher
+			mock_watch = double()
+	
+			#mock Dir
+			Dir.should_receive(:glob).with("**/*.*").and_return(@input_paths)
+		 	
+			subject = Guard::Markdown.new(mock_watch)
+			
+			#Guard::Watcher should handle the matching and path manipulation
+			## TODO the following line throws an uninitilizd const error Guard::Guard::Watcher -> don't know why. It'll have to go untested for now
+			Guard::Watcher.should_receive(:match_files).with(subject, @input_paths).and_return(@changed_paths)
+						
+			subject.should_receive(:run_on_change).with(@changed_paths)
+			
+			subject.run_all
+	  end
+	end 
 end  
 
 private
