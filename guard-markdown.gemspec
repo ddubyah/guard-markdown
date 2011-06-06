@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = Guard::MarkdownVersion::VERSION
   s.authors     = ["Darren Wallace"]
   s.email       = ["wallace@midweekcrisis.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/darwalenator/guard-markdown"
 	s.summary     = %q{Markdown folder > html folder conversion}
   s.description = %q{Watches a source folder and converts markdown docs to html docs in a target folder}
 
