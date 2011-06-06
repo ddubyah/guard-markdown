@@ -84,6 +84,25 @@ describe "Guard-Markdown" do
 				Guard::UI.should_receive(:info).exactly(3).times
 				@subject.run_on_change(@changed_paths)
 		  end
+		end
+		
+		describe "with a template file" do
+		  it "should use the template when converting the source file" do
+				file_double = double() 
+				file_double.should_receive(:read).and_return("#Title")
+				File.should_receive(:open).with("input.md","rb").and_return(file_double)
+				kram_doc = double() 
+				kram_doc.should_receive(:to_html)
+		  	Kramdown::Document.should_receive(:new).with("#Title", :input => "markdown", :template => "template.html.erb").and_return(kram_doc)
+		
+				file_out = double()   
+				FileUtils.should_receive(:mkpath)                                                      
+				File.should_receive(:open).with("output.html", "w").and_return(file_out) 
+				
+				Guard::UI.should_receive(:info).with("input.md >> output.html via template.html.erb")
+				
+				@subject.run_on_change(["input.md|output.html|template.html.erb"])
+		  end
 		end            
 	end 
 	

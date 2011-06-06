@@ -37,14 +37,20 @@ The guard statement defines which guard your configuring and sets any optional p
 
 The watch statement - ok, it may look a little intimidating. You'll need to know your regular expressions. But this is what it's doing.
 
-	watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html"}
+	watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html|optional_template.html.erb"}
 			 
-			^ ------ input file pattern -----------  ^        ^ ---- input file path -------- ^|^ ----- output file path ---^
+			^ ------ input file pattern -----------  ^        ^ ---- input file path -------- ^|^ ----- output file path ---^|^ --- template path ---- ^
 	
 The "input file pattern" is a regular expression that is used to determine which files are watched by the guard. It'll be applied recursively to all files and folders starting in the current working directory. 
 
-Any matches are passed into the block and used to construct the conversion command. The conversion command is a string containing the path to the source file and the desired path to the output file separated by a "|" 
+Any matches are passed into the block and used to construct the conversion command. The conversion command is a string containing the path to the source file and the desired path to the output file separated by a "|". 
+You can also provide an optional template file. This file, if provided will be used by kramdown to wrap the converted output. 
+The template file is _typically_ an html file, and you define where the converted content will be placed by adding <%= @body %> in the desired location. e.g.
 
+ <div id = "main">
+	<%= @body %>
+ </div>
+	
 I hope that makes sense :)
 
 
