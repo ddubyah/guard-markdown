@@ -43,7 +43,7 @@ module Guard
           doc = Kramdown::Document.new(source, :input => "markdown").to_html
         
           File.open(output, "w") do |f|
-            f.puts(doc)
+            f.write(doc)
           end
         end
       end
