@@ -42,7 +42,7 @@ module Guard
           target_path = output.gsub(reg,"\\1")
           FileUtils.mkpath target_path unless target_path.empty?
           
-          kram_ops = { :input => "markdown" }
+          kram_ops = { :input => "kramdown", :output => "html" }
           kram_ops.update({ :template => template }) unless template.nil?
           
           doc = Kramdown::Document.new(source, kram_ops).to_html

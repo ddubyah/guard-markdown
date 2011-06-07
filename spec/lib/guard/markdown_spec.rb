@@ -93,7 +93,7 @@ describe "Guard-Markdown" do
 				File.should_receive(:open).with("input.md","rb").and_return(file_double)
 				kram_doc = double() 
 				kram_doc.should_receive(:to_html)
-		  	Kramdown::Document.should_receive(:new).with("#Title", :input => "markdown", :template => "template.html.erb").and_return(kram_doc)
+		  	Kramdown::Document.should_receive(:new).with("#Title", :input => "kramdown", :output => "html", :template => "template.html.erb").and_return(kram_doc)
 		
 				file_out = double()   
 				FileUtils.should_receive(:mkpath)                                                      
@@ -131,6 +131,6 @@ private
 
 def mock_kramdown text
  	kram_doc = double()
-	Kramdown::Document.should_receive(:new).with(text, :input => "markdown").and_return(kram_doc)
+	Kramdown::Document.should_receive(:new).with(text, :input => "kramdown", :output=> "html").and_return(kram_doc)
 	kram_doc
 end
