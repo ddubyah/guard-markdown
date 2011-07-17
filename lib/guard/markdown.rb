@@ -1,7 +1,7 @@
 require 'guard'
 require 'guard/guard'
 require 'guard/watcher'
-require 'Kramdown'
+require 'kramdown'
 
 module Guard  
   class Markdown < Guard
