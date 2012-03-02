@@ -35,7 +35,7 @@ The guard statement defines which guard your configuring and sets any optional p
 *	:convert_on_start - if true will run all conversions when you start the guard. Defaults to true
 *	:dry_run - if true won't actually run the conversion process, but it will output the files being watched and the file it would write to. Use it to tweak your watch statements and when you're happy set it to false.
 
-If you want to pass additional options directly to kramdown add them as an addition options hash to `kram_ops`.
+If you want to pass additional options directly to kramdown add them as an additional options hash to `kram_ops`.
 
 For example to generate a table of contents consisting of headers 2 through 6 first make sure that something like the following is in your markdown source file. This serves as a placeholder which will be replaced with the table of contents. See: [Automatic Table of Contents Generation](http://kramdown.rubyforge.org/converter/html.html#toc).
 

@@ -118,8 +118,8 @@ describe "Guard-Markdown" do
 		end            
 	end 
 	
-  describe "with additional kram_ops" do
-    it "should use the template when converting the source file" do
+  describe "with a template file and additional kramdown options" do
+    it "should use the additional kramdown options and the template when converting the source file" do
       file_double = double()
       file_double.should_receive(:read).and_return("#Title")
       File.should_receive(:open).with("input.md","rb").and_return(file_double)
@@ -164,12 +164,6 @@ end
 private
 
 def mock_kramdown text
- 	kram_doc = double()
-	Kramdown::Document.should_receive(:new).with(text, :input => "kramdown", :output=> "html").and_return(kram_doc)
-	kram_doc
-end
-
-def mock_kramdown_with_kram_ops text
  	kram_doc = double()
 	Kramdown::Document.should_receive(:new).with(text, :input => "kramdown", :output=> "html").and_return(kram_doc)
 	kram_doc
