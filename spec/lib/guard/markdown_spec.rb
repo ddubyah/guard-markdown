@@ -28,6 +28,18 @@ describe "Guard-Markdown" do
 				@subject.options[:convert_on_start].should be false
 	      @subject.options[:dry_run].should be true
 		end
+		it "should also start with default kramdown options" do
+      @subject.kram_ops[:input].should match "kramdown"
+      @subject.kram_ops[:output].should match "html"
+      @subject.kram_ops[:toc_levels].should be nil
+    end
+		it "should accept additional kramdown options" do
+			@subject = Guard::Markdown.new([],{ 
+				:kram_ops => { :toc_levels => [2, 3, 4, 5, 6] } })
+      @subject.kram_ops[:input].should match "kramdown"
+      @subject.kram_ops[:output].should match "html"
+      @subject.kram_ops[:toc_levels].should =~ [2, 3, 4, 5, 6]
+    end
 	end 
 	
 	describe "start" do
@@ -106,6 +118,28 @@ describe "Guard-Markdown" do
 		end            
 	end 
 	
+  describe "with additional kram_ops" do
+    it "should use the template when converting the source file" do
+      file_double = double()
+      file_double.should_receive(:read).and_return("#Title")
+      File.should_receive(:open).with("input.md","rb").and_return(file_double)
+      kram_doc = double()
+      kram_doc.should_receive(:to_html)
+
+      Kramdown::Document.should_receive(:new).with("#Title", :input => "kramdown", :output => "html",
+          :toc_levels => [2, 3, 4, 5, 6], :template => "template.html.erb").and_return(kram_doc)
+
+      file_out = double()
+      FileUtils.should_receive(:mkpath)
+      File.should_receive(:open).with("output.html", "w").and_return(file_out)
+
+      Guard::UI.should_receive(:info).with("input.md >> output.html via template.html.erb")
+
+			@subject = Guard::Markdown.new([],{ :kram_ops => { :toc_levels => [2, 3, 4, 5, 6] } })
+      @subject.run_on_change(["input.md|output.html|template.html.erb"])
+    end
+  end
+
 	describe "run_all" do
 	  it "should call run_on_change for all matching paths" do
 			#mock Guard.watcher
@@ -130,6 +164,12 @@ end
 private
 
 def mock_kramdown text
+ 	kram_doc = double()
+	Kramdown::Document.should_receive(:new).with(text, :input => "kramdown", :output=> "html").and_return(kram_doc)
+	kram_doc
+end
+
+def mock_kramdown_with_kram_ops text
  	kram_doc = double()
 	Kramdown::Document.should_receive(:new).with(text, :input => "kramdown", :output=> "html").and_return(kram_doc)
 	kram_doc
