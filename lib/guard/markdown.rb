@@ -6,12 +6,15 @@ require 'kramdown'
 module Guard  
   class Markdown < Guard
     # Your code goes here...
+    attr_reader :kram_ops
     def initialize(watchers=[], options={})
       super              
       @options = {
         :convert_on_start => true,
         :dry_run          => false
       }.update(options)
+      @kram_ops = { :input => "kramdown", :output => "html" }
+      @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
     end         
     
     def start
@@ -42,10 +45,9 @@ module Guard
           target_path = output.gsub(reg,"\\1")
           FileUtils.mkpath target_path unless target_path.empty?
           
-          kram_ops = { :input => "kramdown", :output => "html" }
-          kram_ops.update({ :template => template }) unless template.nil?
+          @kram_ops.update({ :template => template }) unless template.nil?
           
-          doc = Kramdown::Document.new(source, kram_ops).to_html
+          doc = Kramdown::Document.new(source, @kram_ops).to_html
                    
         
           File.open(output, "w") do |f|
