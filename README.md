@@ -35,6 +35,17 @@ The guard statement defines which guard your configuring and sets any optional p
 *	:convert_on_start - if true will run all conversions when you start the guard. Defaults to true
 *	:dry_run - if true won't actually run the conversion process, but it will output the files being watched and the file it would write to. Use it to tweak your watch statements and when you're happy set it to false.
 
+If you want to pass additional options directly to kramdown add them as an additional options hash to `kram_ops`.
+
+For example to generate a table of contents consisting of headers 2 through 6 first make sure that something like the following is in your markdown source file. This serves as a placeholder which will be replaced with the table of contents. See: [Automatic Table of Contents Generation](http://kramdown.rubyforge.org/converter/html.html#toc).
+
+    * table of contents
+    {:toc}
+
+Then include the following in the start of your guard markdown block:
+
+    :kram_ops_ => { :toc_levels =>  [2, 3, 4, 5, 6]}
+
 The watch statement - ok, it may look a little intimidating. You'll need to know your regular expressions. But this is what it's doing.
 
 	watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html|optional_template.html.erb"}
@@ -65,6 +76,5 @@ Oh yeah, I'm using [Kramdown](http://kramdown.rubyforge.org/) for the conversion
 
 *	Simplify the required watch statement
 	* Seems a little wasteful to have to recreate the input path in the regexp. Must find a way around it.
-*	Allow the passing of Kramdown options into the guard
 *  Allow the conversion of more doc types using Kramdown
 
