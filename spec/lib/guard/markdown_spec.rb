@@ -58,9 +58,9 @@ describe Guard::Markdown do
       end
 
       it "should not convert on start if convert_on_start is false" do
-        @subject = Guard::Markdown.new([],{ :convert_on_start => false })
-        @subject.should_not_receive(:run_all)
-        @subject.start
+        subject = Guard::Markdown.new([],{ :convert_on_start => false })
+        subject.should_not_receive(:run_all)
+        subject.start
       end
     end
 
