@@ -159,6 +159,27 @@ describe Guard::Markdown do
       subject.run_all
     end
   end
+
+  describe "#extract_info_for" do
+    context "when | is used to define output [and template]" do
+      it "return Readme.md|Readme.html|template.html.erb as [Readme.md, Readme.html, template.html.erb]" do
+        result = subject.extract_info_for "Readme.md|Readme.html|template.html.erb"
+        expect(result).to be_eql ["Readme.md", "Readme.html", "template.html.erb"]
+      end
+    end
+
+    context "without pipes" do
+      it "return Readme.md as [Readme.md, Readme.html]" do
+        expect(subject.extract_info_for "Readme.md" ).to be_eql ["Readme.md", "Readme.html"]
+      end
+
+      it "return some/dir/Readme.md as [some/dir/Readme.md, some/dir/Readme.html]" do
+        result = subject.extract_info_for "some/dir/Readme.md"
+        expect(result).to be_eql ["some/dir/Readme.md", "some/dir/Readme.html"]
+      end
+    end
+  end
+
 end
 
 private
