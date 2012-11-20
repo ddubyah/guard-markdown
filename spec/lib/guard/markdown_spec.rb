@@ -123,6 +123,8 @@ describe Guard::Markdown do
   end
 
   describe "with a template file and additional kramdown options" do
+    subject { Guard::Markdown.new([],{ :kram_ops => { :toc_levels => [2, 3, 4, 5, 6] } }) }
+
     it "should use the additional kramdown options and the template when converting the source file" do
       file_double = double()
       file_double.should_receive(:read).and_return("#Title")
@@ -139,8 +141,7 @@ describe Guard::Markdown do
 
       Guard::UI.should_receive(:info).with("input.md >> output.html via template.html.erb")
 
-      @subject = Guard::Markdown.new([],{ :kram_ops => { :toc_levels => [2, 3, 4, 5, 6] } })
-      @subject.run_on_change(["input.md|output.html|template.html.erb"])
+      subject.run_on_change(["input.md|output.html|template.html.erb"])
     end
   end
 
