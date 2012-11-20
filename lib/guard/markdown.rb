@@ -34,12 +34,9 @@ module Guard
         show_info_with input, output, template
         unless @options[:dry_run]
           @kram_ops.update({ :template => template }) unless template.nil?
-
-          File.open(output_path, "w") do |f|
-            f.write(doc)
-          end
           doc = compile_markdown(input)
           output_path = search_or_create_path_for(output)
+          generate_output output_path, doc
         end
       end
       true
@@ -60,6 +57,12 @@ module Guard
     def compile_markdown(input)
       source = File.open(input,"rb").read
       Kramdown::Document.new(source, @kram_ops).to_html
+    end
+
+    def generate_output(output_path, doc)
+      File.open(output_path, "w") do |f|
+        f.write(doc)
+      end
     end
 
     private
