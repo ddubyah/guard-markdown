@@ -17,8 +17,8 @@ describe "Guard-Markdown" do
 
   describe "initialize" do
     it "should start with default options" do
-        @subject.options[:convert_on_start].should be true
-        @subject.options[:dry_run].should be false
+      @subject.options[:convert_on_start].should be true
+      @subject.options[:dry_run].should be false
     end
 
     it "should be possible to overwrite the default options" do
