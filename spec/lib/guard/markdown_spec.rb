@@ -6,7 +6,6 @@ require "guard/ui"
 describe Guard::Markdown do
 
   before(:each) do
-    @subject = Guard::Markdown.new
     @input_paths   = ["input1.md","input2.markdown","dir1/dir2/input3.md"]
     @output_paths = ["output1.html", "output2.html", "dir1/dir2/output3.html"]
     @changed_paths = []
@@ -17,8 +16,8 @@ describe Guard::Markdown do
 
   describe "initialize" do
     it "should start with default options" do
-      @subject.options[:convert_on_start].should be true
-      @subject.options[:dry_run].should be false
+      subject.options[:convert_on_start].should be true
+      subject.options[:dry_run].should be false
     end
 
     it "should be possible to overwrite the default options" do
@@ -28,31 +27,34 @@ describe Guard::Markdown do
         @subject.options[:convert_on_start].should be false
         @subject.options[:dry_run].should be true
     end
+
     it "should also start with default kramdown options" do
-      @subject.kram_ops[:input].should match "kramdown"
-      @subject.kram_ops[:output].should match "html"
-      @subject.kram_ops[:toc_levels].should be nil
+      subject.kram_ops[:input].should match "kramdown"
+      subject.kram_ops[:output].should match "html"
+      subject.kram_ops[:toc_levels].should be nil
     end
+
     it "should accept additional kramdown options" do
-      @subject = Guard::Markdown.new([],{
+      subject = Guard::Markdown.new([],{
         :kram_ops => { :toc_levels => [2, 3, 4, 5, 6] } })
-      @subject.kram_ops[:input].should match "kramdown"
-      @subject.kram_ops[:output].should match "html"
-      @subject.kram_ops[:toc_levels].should =~ [2, 3, 4, 5, 6]
+      subject.kram_ops[:input].should match "kramdown"
+      subject.kram_ops[:output].should match "html"
+      subject.kram_ops[:toc_levels].should =~ [2, 3, 4, 5, 6]
     end
   end
 
   describe "start" do
     it "should show a welcome message" do
       Guard::UI.should_receive(:info).with("Guard::Markdown has started watching your files")
-      @subject.start
+      subject.start
     end
 
     describe "convert_on_start" do
       it "should run all conversions if convert_on_start is true" do
-        @subject.should_receive(:run_all)
-        @subject.start
+        subject.should_receive(:run_all)
+        subject.start
       end
+
       it "should not convert on start if convert_on_start is false" do
         @subject = Guard::Markdown.new([],{ :convert_on_start => false })
         @subject.should_not_receive(:run_all)
@@ -84,7 +86,7 @@ describe Guard::Markdown do
         #TODO Not sure how to test actually writing to the file
 
       end
-      @subject.run_on_change(@changed_paths)
+      subject.run_on_change(@changed_paths)
     end
 
     describe "dry run" do
@@ -113,7 +115,7 @@ describe Guard::Markdown do
 
         Guard::UI.should_receive(:info).with("input.md >> output.html via template.html.erb")
 
-        @subject.run_on_change(["input.md|output.html|template.html.erb"])
+        subject.run_on_change(["input.md|output.html|template.html.erb"])
       end
     end
   end
