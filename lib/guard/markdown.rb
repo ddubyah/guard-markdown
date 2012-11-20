@@ -9,12 +9,19 @@ module Guard
     attr_reader :kram_ops
     def initialize(watchers=[], options={})
       super
-      @options = {
+      @options = default_options.update(options)
+      @kram_ops = {
+        :input => "kramdown",
+        :output => "html"
+      }
+      @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
+    end
+
+    def default_options
+      {
         :convert_on_start => true,
         :dry_run          => false
-      }.update(options)
-      @kram_ops = { :input => "kramdown", :output => "html" }
-      @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
+      }
     end
 
     def start
