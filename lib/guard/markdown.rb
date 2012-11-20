@@ -9,7 +9,7 @@ module Guard
     attr_reader :kram_ops
     def initialize(watchers=[], options={})
       super
-      @options = default_options.update(options)
+      @options = default_options.merge(options)
       @kram_ops = default_kram_ops
       @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
     end
