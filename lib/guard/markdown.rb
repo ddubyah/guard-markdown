@@ -26,8 +26,6 @@ module Guard
     end
 
     # Called on file(s) modifications
-    # TODO  - this method does far too much. Must refactor to allow
-    #       - for better testing
     def run_on_change(paths)
       paths.each do |path|
         input, output, template = path.split("|")
