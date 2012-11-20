@@ -146,14 +146,14 @@ describe Guard::Markdown do
   end
 
   describe "run_all" do
-    it "should call run_on_change for all matching paths" do
-      #mock Guard.watcher
-      mock_watch = double()
+    #mock Guard.watcher
+    let(:mock_watch) { double }
+    subject { Guard::Markdown.new(mock_watch) }
 
+    it "should call run_on_change for all matching paths" do
       #mock Dir
       Dir.should_receive(:glob).with("**/*.*").and_return(@input_paths)
 
-      subject = Guard::Markdown.new(mock_watch)
 
       #Guard::Watcher should handle the matching and path manipulation
       ## TODO the following line throws an uninitilizd const error Guard::Guard::Watcher -> don't know why. It'll have to go untested for now
