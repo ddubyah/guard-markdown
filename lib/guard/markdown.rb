@@ -6,6 +6,13 @@ require 'kramdown'
 module Guard
   class Markdown < Guard
     attr_reader :kram_ops
+    class Kramdown
+      attr_reader :markdown, :options
+
+      def to_html(markdown, options)
+        ::Kramdown::Document.new(markdown, options).to_html
+      end
+    end
 
     def initialize(watchers=[], options={})
       super
@@ -87,6 +94,7 @@ module Guard
       {
         :convert_on_start => true,
         :dry_run          => false,
+        :markdown_compiler => Kramdown.new,
       }
     end
 
