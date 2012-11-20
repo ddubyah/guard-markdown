@@ -3,7 +3,7 @@ require 'kramdown'
 require "guard/watcher"
 require "guard/ui"
 
-describe "Guard-Markdown" do
+describe Guard::Markdown do
 
   before(:each) do
     @subject = Guard::Markdown.new
