@@ -10,10 +10,7 @@ module Guard
     def initialize(watchers=[], options={})
       super
       @options = default_options.update(options)
-      @kram_ops = {
-        :input => "kramdown",
-        :output => "html"
-      }
+      @kram_ops = default_kram_ops
       @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
     end
 
@@ -21,6 +18,13 @@ module Guard
       {
         :convert_on_start => true,
         :dry_run          => false,
+      }
+    end
+
+    def default_kram_ops
+      {
+        :input => "kramdown",
+        :output => "html",
       }
     end
 
