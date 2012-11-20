@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'Kramdown'
+require 'kramdown'
 require "guard/watcher"
 require "guard/ui" 
 
