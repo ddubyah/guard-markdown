@@ -77,7 +77,7 @@ describe "Guard-Markdown" do
 
         #mock file write
         file_out = double()
-        target_path = @output_paths[i].gsub(/(.+\/).+\.\w+/i,"\\1")
+        target_path = File.dirname @output_paths[i]
         FileUtils.should_receive(:mkpath).with(target_path)
         File.should_receive(:open).with(@output_paths[i], "w").and_return(file_out)
 
