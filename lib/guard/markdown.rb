@@ -33,8 +33,6 @@ module Guard
         input, output, template = path.split("|")
         show_info_with input, output, template
         unless @options[:dry_run]
-          output_path = search_or_create_path_for(output)
-
           @kram_ops.update({ :template => template }) unless template.nil?
 
           source = File.open(input,"rb").read
@@ -43,6 +41,7 @@ module Guard
           File.open(output_path, "w") do |f|
             f.write(doc)
           end
+          output_path = search_or_create_path_for(output)
         end
       end
       true
