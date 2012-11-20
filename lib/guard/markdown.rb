@@ -33,19 +33,14 @@ module Guard
         input, output, template = path.split("|")
         show_info input, output, template
         unless @options[:dry_run]
-          source = File.open(input,"rb").read
-
-          # make sure directory path exists
-          reg = /(.+\/).+\.\w+/i
-          target_path = output.gsub(reg,"\\1")
-          FileUtils.mkpath target_path unless target_path.empty?
+          output_path = search_or_create_path_for(output)
 
           @kram_ops.update({ :template => template }) unless template.nil?
 
+          source = File.open(input,"rb").read
           doc = Kramdown::Document.new(source, @kram_ops).to_html
 
-
-          File.open(output, "w") do |f|
+          File.open(output_path, "w") do |f|
             f.write(doc)
           end
         end
@@ -57,6 +52,12 @@ module Guard
       info = "#{input} >> #{output}"
       info = "#{info} via #{template}" unless template.nil?
       UI.info info
+    end
+
+    def search_or_create_path_for(output)
+      target_path = File.dirname output
+      FileUtils.mkpath target_path
+      output
     end
 
     private
