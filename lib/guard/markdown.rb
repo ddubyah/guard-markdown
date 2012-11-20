@@ -31,9 +31,7 @@ module Guard
     def run_on_change(paths)
       paths.each do |path|
         input, output, template = path.split("|")
-        info = "#{input} >> #{output}"
-        info = "#{info} via #{template}" unless template.nil?
-        UI.info info
+        show_info input, output, template
         unless @options[:dry_run]
           source = File.open(input,"rb").read
 
@@ -53,6 +51,12 @@ module Guard
         end
       end
       true
+    end
+
+    def show_info(input, output, template)
+      info = "#{input} >> #{output}"
+      info = "#{info} via #{template}" unless template.nil?
+      UI.info info
     end
 
     private
