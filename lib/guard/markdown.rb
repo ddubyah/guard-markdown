@@ -14,20 +14,6 @@ module Guard
       @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
     end
 
-    def default_options
-      {
-        :convert_on_start => true,
-        :dry_run          => false,
-      }
-    end
-
-    def default_kram_ops
-      {
-        :input => "kramdown",
-        :output => "html",
-      }
-    end
-
     def start
       UI.info("Guard::Markdown has started watching your files")
       run_all if @options[:convert_on_start]
@@ -68,5 +54,21 @@ module Guard
       end
       true
     end
+
+    private
+    def default_options
+      {
+        :convert_on_start => true,
+        :dry_run          => false,
+      }
+    end
+
+    def default_kram_ops
+      {
+        :input => "kramdown",
+        :output => "html",
+      }
+    end
+
   end
 end
