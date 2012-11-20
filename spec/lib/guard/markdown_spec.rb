@@ -14,24 +14,13 @@ describe Guard::Markdown do
     end
   end
 
-    it "should start with default options" do
-      subject.options[:convert_on_start].should be true
-      subject.options[:dry_run].should be false
-    end
-
   describe "::new" do
     it "should be possible to overwrite the default options" do
-      @subject = Guard::Markdown.new([],{
+      subject = Guard::Markdown.new([],{
         :convert_on_start => false,
         :dry_run          => true  })
-        @subject.options[:convert_on_start].should be false
-        @subject.options[:dry_run].should be true
-    end
-
-    it "should also start with default kramdown options" do
-      subject.kram_ops[:input].should match "kramdown"
-      subject.kram_ops[:output].should match "html"
-      subject.kram_ops[:toc_levels].should be nil
+        subject.options[:convert_on_start].should be false
+        subject.options[:dry_run].should be true
     end
 
     it "should accept additional kramdown options" do
@@ -40,6 +29,19 @@ describe Guard::Markdown do
       subject.kram_ops[:input].should match "kramdown"
       subject.kram_ops[:output].should match "html"
       subject.kram_ops[:toc_levels].should =~ [2, 3, 4, 5, 6]
+    end
+
+    context "with default parameters (without arguments)" do
+      it "should start with default options" do
+        subject.options[:convert_on_start].should be true
+        subject.options[:dry_run].should be false
+      end
+
+      it "should also start with default kramdown options" do
+        subject.kram_ops[:input].should match "kramdown"
+        subject.kram_ops[:output].should match "html"
+        subject.kram_ops[:toc_levels].should be nil
+      end
     end
   end
 
@@ -90,13 +92,13 @@ describe Guard::Markdown do
     end
 
     describe "dry run" do
+      subject { Guard::Markdown.new([],{ :dry_run=> true  }) }
       it "should not permorm a conversion on a dry run" do
-        @subject = Guard::Markdown.new([],{ :dry_run=> true  })
         FileUtils.should_not_receive(:mkpath)
         File.should_not_receive(:open)
         Kramdown::Document.should_not_receive(:new)
         Guard::UI.should_receive(:info).exactly(3).times
-        @subject.run_on_change(@changed_paths)
+        subject.run_on_change(@changed_paths)
       end
     end
 
