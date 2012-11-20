@@ -5,8 +5,8 @@ require 'kramdown'
 
 module Guard
   class Markdown < Guard
-
     attr_reader :kram_ops
+
     def initialize(watchers=[], options={})
       super
       @options = default_options.merge(options)
