@@ -30,12 +30,7 @@ module Guard
       paths.each do |path|
         input, output, template = path.split("|")
         show_info_with input, output, template
-        unless @options[:dry_run]
-          @kram_ops.update({ :template => template }) unless template.nil?
-          doc = compile_markdown(input)
-          output_path = search_or_create_path_for(output)
-          generate_output output_path, doc
-        end
+        generate_html input, output, template unless @options[:dry_run]
       end
       true
     end
@@ -61,6 +56,13 @@ module Guard
       File.open(output_path, "w") do |f|
         f.write(doc)
       end
+    end
+
+    def generate_html(markdown, output_path, template = nil)
+      @kram_ops.update({ :template => template }) unless template.nil?
+      html = compile_markdown(markdown)
+      target_path = search_or_create_path_for(output_path)
+      generate_output target_path, html
     end
 
     private
