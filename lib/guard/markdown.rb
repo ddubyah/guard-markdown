@@ -22,7 +22,7 @@ module Guard
       @kram_ops = default_kram_ops
       @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
 
-      @compiler_options = default_compiler_options
+      @compiler_options = @kram_ops || default_compiler_options
       @compiler_options.update(@options[:compiler_options]) if @options[:compiler_options]
 
       @markdown_compiler = @options[:markdown_compiler]
@@ -93,7 +93,7 @@ module Guard
 
     def compile_markdown(input)
       markdown = File.open(input, "rb").read
-      markdown_compiler.to_html(markdown, @kram_ops)
+      markdown_compiler.to_html(markdown, @compiler_options)
     end
 
     private
