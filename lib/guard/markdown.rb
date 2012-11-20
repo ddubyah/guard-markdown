@@ -35,12 +35,10 @@ module Guard
         unless @options[:dry_run]
           @kram_ops.update({ :template => template }) unless template.nil?
 
-          source = File.open(input,"rb").read
-          doc = Kramdown::Document.new(source, @kram_ops).to_html
-
           File.open(output_path, "w") do |f|
             f.write(doc)
           end
+          doc = compile_markdown(input)
           output_path = search_or_create_path_for(output)
         end
       end
@@ -57,6 +55,11 @@ module Guard
       target_path = File.dirname output
       FileUtils.mkpath target_path
       output
+    end
+
+    def compile_markdown(input)
+      source = File.open(input,"rb").read
+      Kramdown::Document.new(source, @kram_ops).to_html
     end
 
     private
