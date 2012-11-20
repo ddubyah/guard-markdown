@@ -187,10 +187,11 @@ describe Guard::Markdown do
   end
 
   describe "#compile_markdown" do
+    let(:markdown_file) { File.join fixtures, "README.md" }
+    let(:generated_file) { File.join fixtures, "README.html" }
 
     context "providing a markdown compiler" do
       let(:compiler) { double }
-      let(:markdown_file) { File.join fixtures, "README.md" }
       subject { Guard::Markdown.new([], markdown_compiler: compiler) }
 
       it "should allow to change markdown compiler with option" do
@@ -203,6 +204,18 @@ describe Guard::Markdown do
       end
 
     end
+  end
+
+  describe "#generate_html" do
+    let(:markdown_file) { File.join fixtures, "README.md" }
+    let(:generated_file) { File.join fixtures, "README.html" }
+
+    it "should generate a fixtures/README.html based on fixtures/README.md" do
+      subject.generate_html(markdown_file, generated_file)
+      expect(File.exist?(generated_file)).to be_true
+    end
+
+    after { FileUtils.rm_rf(generated_file) }
   end
 
 end
