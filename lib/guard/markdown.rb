@@ -5,7 +5,7 @@ require 'kramdown'
 
 module Guard
   class Markdown < Guard
-    # Your code goes here...
+
     attr_reader :kram_ops
     def initialize(watchers=[], options={})
       super
