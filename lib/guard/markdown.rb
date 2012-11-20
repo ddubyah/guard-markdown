@@ -37,6 +37,20 @@ module Guard
 
     def extract_info_for(path)
       path.split("|")
+
+    def name_md2html(path)
+      file_name = File.basename(path)
+      extension = File.extname(file_name)
+      html_file_name = file_name.gsub(extension, '') << ".html"
+
+      original_path = File.dirname(path)
+      target_path = if(original_path == ".")
+        html_file_name
+      else
+        File.join(original_path, html_file_name)
+      end
+
+      target_path
     end
 
     def show_info_with(input, output, template)
