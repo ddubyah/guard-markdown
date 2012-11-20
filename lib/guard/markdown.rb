@@ -75,17 +75,11 @@ module Guard
       Kramdown::Document.new(source, @kram_ops).to_html
     end
 
-    def generate_output(output_path, doc)
-      File.open(output_path, "w") do |f|
-        f.write(doc)
-      end
-    end
-
     def generate_html(markdown, output_path, template = nil)
       @kram_ops.update({ :template => template }) unless template.nil?
       html = compile_markdown(markdown)
       target_path = search_or_create_path_for(output_path)
-      generate_output target_path, html
+      File.open(target_path, "w") { |f| f.write(html) }
     end
 
     private
