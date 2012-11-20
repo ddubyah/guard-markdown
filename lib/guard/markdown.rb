@@ -5,7 +5,6 @@ require 'kramdown'
 
 module Guard
   class Markdown < Guard
-    attr_reader :kram_ops
     class Kramdown
       attr_reader :markdown, :options
 
@@ -14,11 +13,19 @@ module Guard
       end
     end
 
+    attr_reader :kram_ops, :markdown_compiler, :compiler_options
+
     def initialize(watchers=[], options={})
       super
       @options = default_options.merge(options)
+
       @kram_ops = default_kram_ops
       @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
+
+      @compiler_options = default_compiler_options
+      @compiler_options.update(@options[:compiler_options]) if @options[:compiler_options]
+
+      @markdown_compiler = @options[:markdown_compiler]
     end
 
     def start
@@ -77,16 +84,16 @@ module Guard
       output
     end
 
-    def compile_markdown(input)
-      source = File.open(input,"rb").read
-      Kramdown::Document.new(source, @kram_ops).to_html
-    end
-
     def generate_html(markdown, output_path, template = nil)
       @kram_ops.update({ :template => template }) unless template.nil?
       html = compile_markdown(markdown)
       target_path = search_or_create_path_for(output_path)
       File.open(target_path, "w") { |f| f.write(html) }
+    end
+
+    def compile_markdown(input)
+      markdown = File.open(input, "rb").read
+      markdown_compiler.to_html(markdown, @kram_ops)
     end
 
     private
@@ -99,6 +106,10 @@ module Guard
     end
 
     def default_kram_ops
+      default_compiler_options
+    end
+
+    def default_compiler_options
       {
         :input => "kramdown",
         :output => "html",

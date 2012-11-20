@@ -4,6 +4,7 @@ require "guard/watcher"
 require "guard/ui"
 
 describe Guard::Markdown do
+  let(:fixtures) { File.expand_path("../../fixtures/some_project", __FILE__) }
 
   before(:each) do
     @input_paths   = ["input1.md","input2.markdown","dir1/dir2/input3.md"]
@@ -182,6 +183,25 @@ describe Guard::Markdown do
         result = subject.extract_info_for "some/dir/Readme.md"
         expect(result).to be_eql ["some/dir/Readme.md", "some/dir/Readme.html"]
       end
+    end
+  end
+
+  describe "#compile_markdown" do
+
+    context "providing a markdown compiler" do
+      let(:compiler) { double }
+      let(:markdown_file) { File.join fixtures, "README.md" }
+      subject { Guard::Markdown.new([], markdown_compiler: compiler) }
+
+      it "should allow to change markdown compiler with option" do
+        expect(subject.markdown_compiler).to be compiler
+      end
+
+      it "should invoke #to_html(input) on a markdown compiler" do
+        compiler.should_receive(:to_html).with(IO.read(markdown_file), subject.compiler_options)
+        subject.compile_markdown(markdown_file)
+      end
+
     end
   end
 
