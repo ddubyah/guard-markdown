@@ -31,7 +31,7 @@ module Guard
     def run_on_change(paths)
       paths.each do |path|
         input, output, template = path.split("|")
-        show_info input, output, template
+        show_info_with input, output, template
         unless @options[:dry_run]
           output_path = search_or_create_path_for(output)
 
@@ -48,7 +48,7 @@ module Guard
       true
     end
 
-    def show_info(input, output, template)
+    def show_info_with(input, output, template)
       info = "#{input} >> #{output}"
       info = "#{info} via #{template}" unless template.nil?
       UI.info info
