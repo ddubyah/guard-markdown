@@ -28,11 +28,15 @@ module Guard
     # Called on file(s) modifications
     def run_on_change(paths)
       paths.each do |path|
-        input, output, template = path.split("|")
+        input, output, template = extract_info_for path
         show_info_with input, output, template
         generate_html input, output, template unless @options[:dry_run]
       end
       true
+    end
+
+    def extract_info_for(path)
+      path.split("|")
     end
 
     def show_info_with(input, output, template)
