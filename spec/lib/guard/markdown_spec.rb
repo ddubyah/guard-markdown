@@ -14,12 +14,12 @@ describe Guard::Markdown do
     end
   end
 
-  describe "initialize" do
     it "should start with default options" do
       subject.options[:convert_on_start].should be true
       subject.options[:dry_run].should be false
     end
 
+  describe "::new" do
     it "should be possible to overwrite the default options" do
       @subject = Guard::Markdown.new([],{
         :convert_on_start => false,
