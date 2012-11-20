@@ -36,7 +36,12 @@ module Guard
     end
 
     def extract_info_for(path)
-      path.split("|")
+      if path.include? "|"
+        return path.split("|")
+      end
+
+      [path, name_md2html(path)]
+    end
 
     def name_md2html(path)
       file_name = File.basename(path)
