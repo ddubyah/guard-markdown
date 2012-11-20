@@ -74,7 +74,6 @@ Oh yeah, I'm using [Kramdown](http://kramdown.rubyforge.org/) for the conversion
 
 # TODO #
 
-*	Simplify the required watch statement
-	* Seems a little wasteful to have to recreate the input path in the regexp. Must find a way around it.
-*  Allow the conversion of more doc types using Kramdown
+* Allow the conversion of more doc types using Kramdown
+* Allow configuration of output directory via Guard options
 
