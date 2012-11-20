@@ -20,7 +20,7 @@ module Guard
     def default_options
       {
         :convert_on_start => true,
-        :dry_run          => false
+        :dry_run          => false,
       }
     end
 
