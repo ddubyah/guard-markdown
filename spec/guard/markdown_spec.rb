@@ -32,6 +32,14 @@ describe Guard::Markdown do
       subject.kram_ops[:toc_levels].should =~ [2, 3, 4, 5, 6]
     end
 
+    it "should accept additional markdown compiler options" do
+      subject = Guard::Markdown.new([],{
+        :compiler_options => { :toc_levels => [2, 3, 4, 5, 6] } })
+      subject.compiler_options[:input].should match "kramdown"
+      subject.compiler_options[:output].should match "html"
+      subject.compiler_options[:toc_levels].should =~ [2, 3, 4, 5, 6]
+    end
+
     context "with default parameters (without arguments)" do
       it "should start with default options" do
         subject.options[:convert_on_start].should be true
