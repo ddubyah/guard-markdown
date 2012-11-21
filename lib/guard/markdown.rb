@@ -66,10 +66,20 @@ module Guard
       target_path = if(original_path == ".")
         html_file_name
       else
-        File.join(original_path, html_file_name)
+        File.join output_path(original_path), html_file_name
       end
 
       target_path
+    end
+
+    def output_path(original_path)
+      output_path = if(@options[:output_dir])
+        File.join(@options[:output_dir], original_path)
+      else
+        original_path
+      end
+
+      output_path
     end
 
     def show_info_with(input, output, template)
@@ -102,6 +112,7 @@ module Guard
         :convert_on_start => true,
         :dry_run          => false,
         :markdown_compiler => Kramdown.new,
+        :output_dir => nil,
       }
     end
 
