@@ -19,6 +19,7 @@ module Guard
       super
       @options = default_options.merge(options)
 
+      # TODO: we should deprecate this option (kram_ops) in favor of compiler_options
       @kram_ops = default_kram_ops
       @kram_ops.update(@options[:kram_ops]) if @options[:kram_ops]
 
