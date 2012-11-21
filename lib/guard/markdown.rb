@@ -35,9 +35,7 @@ module Guard
     end
 
     def run_all
-      files = Dir.glob("**/*.*")
-      targets = Watcher.match_files(self, files)
-      run_on_change targets
+      run_on_change Watcher.match_files(self, Dir.glob(File.join("**", "*.*")))
     end
 
     # Called on file(s) modifications
