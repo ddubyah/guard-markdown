@@ -4,6 +4,7 @@
 * Added :output_dir => '' option
 * Added :output_dir => 'tmp' to Guardfile template
 * Added :mardown_compiler => option (to allow change the compiler)
+* Added documentation (README) for the new options
 * Removes :dry_run => true from Guardfile template
 * Removes :convert_on_start => true (default) from Guardfile template
 * Removes obligation to define ouput_dir on watcher definition
