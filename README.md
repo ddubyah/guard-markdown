@@ -1,4 +1,4 @@
-# Guard::Markdown #
+# Guard::Markdown [![Build Status](https://travis-ci.org/ricardovaleriano/guard-markdown.png)](https://travis-ci.org/ricardovaleriano/guard-markdown) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/ricardovaleriano/guard-markdown)
 Markdown guard will watch your markdown documents for changes and convert them to lovely, semantic html. Yay!
 
 ## Install ##
