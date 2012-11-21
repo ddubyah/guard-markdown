@@ -53,10 +53,12 @@ Then include the following in the start of your guard markdown block:
 
 If you really want, you can use some regular expressions in your watch statement
 to tweak the paths of your inputs and ouputs. Look this example:
-	watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html|optional_template.html.erb"}
-			 
-			^ ------ input file pattern -----------  ^        ^ ---- input file path -------- ^|^ ----- output file path ---^|^ --- template path ---- ^
-	
+
+```ruby
+  watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html|optional_template.html.erb"}
+
+        ^ ------ input file pattern -----------  ^        ^ ---- input file path -------- ^|^ ----- output file path ---^|^ --- template path ---- ^
+```
 The "input file pattern" is a regular expression that is used to determine which files are watched by the guard. It'll be applied recursively to all files and folders starting in the current working directory. 
 
 Any matches are passed into the block and used to construct the conversion command. The conversion command is a string containing the path to the source file and the desired path to the output file separated by a "|". 
