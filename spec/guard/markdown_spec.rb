@@ -184,6 +184,15 @@ describe Guard::Markdown do
         expect(result).to be_eql ["some/dir/Readme.md", "some/dir/Readme.html"]
       end
     end
+
+    context "with output_dir option" do
+      subject { Guard::Markdown.new([], { output_dir: "omg_test" }) }
+
+      it "return omg_test/some/dir/README.md as [some/dir/README.md, omg_test/some/dir/Readme.html]" do
+        result = subject.extract_info_for "some/dir/Readme.md"
+        expect(result).to be_eql ["some/dir/Readme.md", "omg_test/some/dir/Readme.html"]
+      end
+    end
   end
 
   describe "#compile_markdown" do
