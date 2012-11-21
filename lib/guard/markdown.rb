@@ -62,13 +62,13 @@ module Guard
       html_file_name = file_name.gsub(extension, '') << ".html"
 
       original_path = File.dirname(path)
-      target_path = if(original_path == ".")
+      target_file = if(original_path == ".")
         html_file_name
       else
-        File.join output_path(original_path), html_file_name
+        File.join original_path, html_file_name
       end
 
-      target_path
+      output_path target_file
     end
 
     def output_path(original_path)

@@ -192,6 +192,11 @@ describe Guard::Markdown do
         result = subject.extract_info_for "some/dir/Readme.md"
         expect(result).to be_eql ["some/dir/Readme.md", "omg_test/some/dir/Readme.html"]
       end
+
+      it "return omg_test/README.md as [some/dir/README.md, omg_test/some/dir/Readme.html]" do
+        result = subject.extract_info_for "README.md"
+        expect(result).to be_eql ["README.md", "omg_test/README.html"]
+      end
     end
   end
 
