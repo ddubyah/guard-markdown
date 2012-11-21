@@ -26,7 +26,7 @@ Create it with:
 	
 Then tweak the watch statements to your hearts content. It'll look a lot like this:
 
-```
+```ruby
 guard 'markdown', output_dir: 'tmp' do
   watch(%r{^(.*)(\.md|\.markdown)$})
 end
