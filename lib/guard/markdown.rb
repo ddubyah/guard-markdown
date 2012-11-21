@@ -16,8 +16,8 @@ module Guard
     attr_reader :kram_ops, :markdown_compiler, :compiler_options
 
     def initialize(watchers=[], options={})
-      super
       @options = default_options.merge(options)
+      super(watchers, @options)
 
       # TODO: we should deprecate this option (kram_ops) in favor of compiler_options
       @kram_ops = default_kram_ops
