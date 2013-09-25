@@ -1,4 +1,4 @@
-# Guard::Markdown #
+# Guard::Markdown [![Build Status](https://travis-ci.org/ricardovaleriano/guard-markdown.png)](https://travis-ci.org/ricardovaleriano/guard-markdown) [![Code Climate](https://codeclimate.com/badge.png)](https://codeclimate.com/github/ricardovaleriano/guard-markdown)
 Markdown guard will watch your markdown documents for changes and convert them to lovely, semantic html. Yay!
 
 ## Install ##
@@ -11,7 +11,7 @@ Install with
 	
 Or add it to your Gemfile
 
-	gem 'guard-markdown'    
+	gem 'guard-markdown'
 	
 ## Usage ##
 
@@ -26,16 +26,18 @@ Create it with:
 	
 Then tweak the watch statements to your hearts content. It'll look a lot like this:
 
-	guard 'markdown', :convert_on_start => true, :dry_run => true do  
-		watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html"}
-	end
-
+```ruby
+guard 'markdown', output_dir: 'tmp' do
+  watch(%r{^(.*)(\.md|\.markdown)$})
+end
+```
 The guard statement defines which guard your configuring and sets any optional parameters.
 
-*	:convert_on_start - if true will run all conversions when you start the guard. Defaults to true
-*	:dry_run - if true won't actually run the conversion process, but it will output the files being watched and the file it would write to. Use it to tweak your watch statements and when you're happy set it to false.
-
-If you want to pass additional options directly to kramdown add them as an additional options hash to `kram_ops`.
+* :output_dir - indicates where the generated html files will stay.
+* :convert_on_start - if true will run all conversions when you start the guard. Defaults to true
+* :dry_run - if true won't actually run the conversion process, but it will output the files being watched and the file it would write to. Use it to tweak your watch statements and when you're happy set it to false.
+* :compiler_options - use it to pass any additional options for the markdown
+  compiler (kramdown by default)
 
 For example to generate a table of contents consisting of headers 2 through 6 first make sure that something like the following is in your markdown source file. This serves as a placeholder which will be replaced with the table of contents. See: [Automatic Table of Contents Generation](http://kramdown.rubyforge.org/converter/html.html#toc).
 
@@ -44,14 +46,19 @@ For example to generate a table of contents consisting of headers 2 through 6 fi
 
 Then include the following in the start of your guard markdown block:
 
-    :kram_ops_ => { :toc_levels =>  [2, 3, 4, 5, 6]}
+    :markdown_compiler => { :toc_levels =>  [2, 3, 4, 5, 6]}
 
-The watch statement - ok, it may look a little intimidating. You'll need to know your regular expressions. But this is what it's doing.
+* :markdown_compiler - allow you to replace the kramdown compiler by another one
+  that you may prefer.
 
-	watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html|optional_template.html.erb"}
-			 
-			^ ------ input file pattern -----------  ^        ^ ---- input file path -------- ^|^ ----- output file path ---^|^ --- template path ---- ^
-	
+If you really want, you can use some regular expressions in your watch statement
+to tweak the paths of your inputs and ouputs. Look this example:
+
+```ruby
+  watch (/source_dir\/(.+\/)*(.+\.)(md|markdown)/i) { |m| "source_dir/#{m[1]}#{m[2]}#{m[3]}|output_dir/#{m[1]}#{m[2]}html|optional_template.html.erb"}
+
+        ^ ------ input file pattern -----------  ^        ^ ---- input file path -------- ^|^ ----- output file path ---^|^ --- template path ---- ^
+```
 The "input file pattern" is a regular expression that is used to determine which files are watched by the guard. It'll be applied recursively to all files and folders starting in the current working directory. 
 
 Any matches are passed into the block and used to construct the conversion command. The conversion command is a string containing the path to the source file and the desired path to the output file separated by a "|". 
@@ -64,8 +71,6 @@ The template file is _typically_ an html file, and you define where the converte
 	
 I hope that makes sense :)
 
-
-
 ## Have Fun ##
 
 Go see the other [great guards available](https://github.com/guard/guard/wiki/List-of-available-Guards)
@@ -74,7 +79,5 @@ Oh yeah, I'm using [Kramdown](http://kramdown.rubyforge.org/) for the conversion
 
 # TODO #
 
-*	Simplify the required watch statement
-	* Seems a little wasteful to have to recreate the input path in the regexp. Must find a way around it.
-*  Allow the conversion of more doc types using Kramdown
+* Allow the conversion of more doc types using Kramdown
 
